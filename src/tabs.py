@@ -3,24 +3,7 @@ from tkinter import *
 BASE = RAISED
 SELECTED = FLAT
 
-__doc__ = info = '''
-This script was written by Sunjay Varma - www.sunjay-varma.com
-
-This script has two main classes:
-Tab - Basic tab used by TabBar for main functionality
-TabBar - The tab bar that is placed above tab bodies (Tabs)
-
-It uses a pretty basic structure:
-root
--->TabBar(root, init_name) (For switching tabs)
--->Tab    (Place holder for content)
-	\t-->content (content of the tab; parent=Tab)
--->Tab    (Place holder for content)
-	\t-->content (content of the tab; parent=Tab)
--->Tab    (Place holder for content)
-	\t-->content (content of the tab; parent=Tab)
-etc.
-'''
+__doc__ = info = ""
 
 
 # a base tab class
@@ -49,7 +32,7 @@ class TabBar(Frame):
         self.tabs[tab.tab_name] = tab  # add it to the list of tabs
         b = Button(self, text=tab.tab_name, relief=BASE,  # basic button stuff
                    command=(lambda name=tab.tab_name: self.switch_tab(name)))  # set the command to switch tabs
-        b.pack(side=LEFT)  # pack the buttont to the left mose of self
+        b.pack(side=LEFT)  # pack the button to the left mose of self
         self.buttons[tab.tab_name] = b  # add it to the list of buttons
 
     def delete(self, tabname):

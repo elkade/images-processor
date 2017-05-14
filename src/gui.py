@@ -9,15 +9,10 @@ import PIL.ImageTk
 import matplotlib
 from skimage.exposure import adjust_gamma
 
+from GammaTab import GammaTab
 from tabs import *
 
 matplotlib.use('TkAgg')
-
-
-def destroy(e):
-    sys.exit()
-
-
 root = Tk()
 root.wm_title("Łukasz Dragan - Podstawy przetwarzania obrazow")
 
@@ -35,7 +30,15 @@ original_image.image = photo
 original_image.pack()
 
 
-def callback():
+def save_image():
+    global image
+    file_path = filedialog.asksaveasfilename(defaultextension=".jpg")
+    if not file_path:
+        return
+    image.save(file_path, "JPEG")
+
+
+def load_image():
     file_path = filedialog.askopenfilename()
     if not file_path:
         return
@@ -45,35 +48,30 @@ def callback():
     original_image.image = pht
 
 
-b = Button(image_frame, text="Load image...", command=callback)
-b.pack()
+Button(image_frame, text="Load image...", command=load_image).pack()
+Button(image_frame, text="Save image...", command=save_image).pack()
 
 bar = TabBar(tab_frame, "Kontrast")
 
-tab1 = Tab(tab_frame, "Kontrast")
-# Label(tab1, text="tab1 text", bg="white", fg="red").pack(side=TOP, expand=YES, fill=BOTH)
 
-w = Scale(master=tab1, orient=HORIZONTAL, from_=0, to=100, command=lambda x: print(x))
-w.pack()
-
-tab2 = Tab(tab_frame, "Jasność")
-Label(tab2, text="Gamma").pack(side=TOP, fill=BOTH, expand=YES)
-
-
-def gamma(x):
+def update_image(fun, x):
     global X
     global original_image
-    l = np.log(int(x)/100)*-1
-    print(l)
-    I = adjust_gamma(X, gamma=l, gain=1)
-    image = PIL.Image.fromarray(np.uint8(I))
+    global image
+    global photo
+    im = fun(x, X)
+    image = PIL.Image.fromarray(np.uint8(im))
     photo = PIL.ImageTk.PhotoImage(image)
     original_image.config(image=photo)
     original_image.image = photo
 
 
-w = Scale(master=tab2, orient=HORIZONTAL, from_=1, to=100, command=gamma)
+tab1 = Tab(tab_frame, "Kontrast")
+
+w = Scale(master=tab1, orient=HORIZONTAL, from_=0, to=100, command=lambda x: print(x))
 w.pack()
+
+tab2 = GammaTab(tab_frame, "Jasność", update_image)
 
 tab3 = Tab(tab_frame, "Histogram")
 Label(tab3, bg='white', text="Tab3 text").pack(
@@ -96,9 +94,12 @@ canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=1)
 # button = Button(master=image_frame, text='Quit', command=sys.exit)
 # button.pack(side=BOTTOM)
 
+
+
 bar.add(tab1)
 bar.add(tab2)
 bar.add(tab3)
+# bar.add(tab4)
 # bar.config(bd=2, relief=RIDGE)			# add some border
 bar.show()
 
