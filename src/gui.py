@@ -8,8 +8,9 @@ import PIL.Image
 import PIL.ImageTk
 import matplotlib
 from skimage.exposure import adjust_gamma
-
+from skimage import data
 from GammaTab import GammaTab
+from HistTab import HistTab
 from tabs import *
 
 matplotlib.use('TkAgg')
@@ -66,14 +67,11 @@ def update_image(fun, x):
     original_image.image = photo
 
 
-tab1 = Tab(tab_frame, "Kontrast")
-
-w = Scale(master=tab1, orient=HORIZONTAL, from_=0, to=100, command=lambda x: print(x))
-w.pack()
+tab1 = HistTab(tab_frame, "Kontrast", update_image)
 
 tab2 = GammaTab(tab_frame, "Jasność", update_image)
 
-tab3 = Tab(tab_frame, "Histogram")
+tab3 = Tab(tab_frame, "Filtry")
 Label(tab3, bg='white', text="Tab3 text").pack(
     side=LEFT, expand=YES, fill=BOTH)
 
