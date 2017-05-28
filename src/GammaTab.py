@@ -10,11 +10,14 @@ class GammaTab(Tab):
     def __init__(self, frame, name, fun):
         Tab.__init__(self, frame, name)
         Label(self, text="Gamma").pack(side=TOP, fill=BOTH, expand=YES)
+        w = Scale(master=self, orient=HORIZONTAL, from_=-100, to=100)
 
         def gamma(x, X):
-            l = np.log(int(x) / 100) * -1
+            size = int(w.get())
+            l = 1.03**size
             print(l)
             return adjust_gamma(X, gamma=l, gain=1)
 
-        w = Scale(master=self, orient=HORIZONTAL, from_=1, to=100, command=lambda x: fun(gamma, x))
         w.pack()
+        Button(master=self, text="Gamma", command=lambda: fun(gamma, 0)).pack()
+
