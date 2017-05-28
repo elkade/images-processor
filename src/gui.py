@@ -18,6 +18,26 @@ root.wm_title("Łukasz Dragan - Podstawy przetwarzania obrazow")
 image_frame = Frame(root)
 image_frame.pack(padx=5, pady=10, anchor=NW, side=LEFT)
 
+# Label(tab3, bg='white', text="Tab3 text").pack(
+#     side=LEFT, expand=YES, fill=BOTH)
+#
+# f = Figure(figsize=(5, 4), dpi=100)
+# a = f.add_subplot(111)
+# t = arange(0.0, 3.0, 0.01)
+# s = sin(2 * pi * t)
+# a.plot(t, s)
+# a.set_title('Tk embedding')
+# a.set_xlabel('X axis label')
+# a.set_ylabel('Y label')
+#
+# canvas = FigureCanvasTkAgg(f, master=tab3)
+#
+# canvas.show()
+# canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=1)
+
+# button = Button(master=image_frame, text='Quit', command=sys.exit)
+# button.pack(side=BOTTOM)
+
 tab_frame = Frame(root)
 tab_frame.pack(padx=5, pady=10, anchor=NW, side=LEFT)
 
@@ -75,27 +95,6 @@ tab1 = HistTab(tab_frame, "Kontrast", update_image)
 tab2 = GammaTab(tab_frame, "Jasność", update_image)
 
 tab3 = MorphTab(tab_frame, "Filtry", update_image)
-# Label(tab3, bg='white', text="Tab3 text").pack(
-#     side=LEFT, expand=YES, fill=BOTH)
-#
-# f = Figure(figsize=(5, 4), dpi=100)
-# a = f.add_subplot(111)
-# t = arange(0.0, 3.0, 0.01)
-# s = sin(2 * pi * t)
-# a.plot(t, s)
-# a.set_title('Tk embedding')
-# a.set_xlabel('X axis label')
-# a.set_ylabel('Y label')
-#
-# canvas = FigureCanvasTkAgg(f, master=tab3)
-#
-# canvas.show()
-# canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=1)
-
-# button = Button(master=image_frame, text='Quit', command=sys.exit)
-# button.pack(side=BOTTOM)
-
-
 
 bar.add(tab1)
 bar.add(tab2)
