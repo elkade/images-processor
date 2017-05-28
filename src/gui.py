@@ -9,52 +9,33 @@ import numpy as np
 
 from GammaTab import GammaTab
 from HistTab import HistTab
+from ImageFrame import ImageFrame
 from MorphTab import MorphTab
 from tabs import *
+
 matplotlib.use('TkAgg')
 root = Tk()
 root.wm_title("Łukasz Dragan - Podstawy przetwarzania obrazow")
 
-image_frame = Frame(root)
-image_frame.pack(padx=5, pady=10, anchor=NW, side=LEFT)
+initial_image = PIL.Image.open("lenna.png")
 
-# Label(tab3, bg='white', text="Tab3 text").pack(
-#     side=LEFT, expand=YES, fill=BOTH)
-#
-# f = Figure(figsize=(5, 4), dpi=100)
-# a = f.add_subplot(111)
-# t = arange(0.0, 3.0, 0.01)
-# s = sin(2 * pi * t)
-# a.plot(t, s)
-# a.set_title('Tk embedding')
-# a.set_xlabel('X axis label')
-# a.set_ylabel('Y label')
-#
-# canvas = FigureCanvasTkAgg(f, master=tab3)
-#
-# canvas.show()
-# canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=1)
+original_image_frame = ImageFrame(root, initial_image, "Original image")
+original_image_frame.pack(padx=5, pady=10, anchor=NW, side=LEFT)
 
-# button = Button(master=image_frame, text='Quit', command=sys.exit)
-# button.pack(side=BOTTOM)
+transformed_image_frame = ImageFrame(root, initial_image, "Transformed image")
+transformed_image_frame.pack(padx=5, pady=10, anchor=NW, side=LEFT)
 
 tab_frame = Frame(root)
 tab_frame.pack(padx=5, pady=10, anchor=NW, side=LEFT)
 
-image = PIL.Image.open("lenna.png")
-X = np.asarray(image)
-photo = PIL.ImageTk.PhotoImage(image)
-original_image = Label(image_frame, image=photo)
-original_image.image = photo
-original_image.pack()
-
 
 def save_image():
-    global image
-    file_path = "img_"+strftime("%Y-%m-%dT%H:%M:%S", gmtime())#filedialog.asksaveasfilename(defaultextension=".jpg")
+    file_path = os.path.join('img', "img_" + strftime("%Y-%m-%dT%H:%M:%S", gmtime()))
+    # filedialog.asksaveasfilename(defaultextension=".jpg")
     if not file_path:
         return
-    image.save(file_path, "JPEG")
+
+    transformed_image_frame.get_image().save(file_path, "JPEG")
     load_image(os.path.join(os.path.dirname(os.path.abspath(__file__)), file_path))
 
 
@@ -63,32 +44,23 @@ def load_image(file_path=None):
         file_path = filedialog.askopenfilename()
     if not file_path:
         return
-    global image
-    global photo
-    global X
-    image = PIL.Image.open(file_path)
-    X = np.asarray(image)
-    photo = PIL.ImageTk.PhotoImage(image)
-    original_image.config(image=photo)
-    original_image.image = photo
+    image = PIL.Image.open(os.path.join('img', file_path))
+    original_image_frame.update(image)
+    transformed_image_frame.update(image)
 
-Button(image_frame, text="Load image...", command=load_image).pack()
-Button(image_frame, text="Save image", command=save_image).pack()
+
+def update_image(fun):
+    image = original_image_frame.get_image()
+    np_image = np.asarray(image)
+    new_np_image = fun(np_image)
+    image = PIL.Image.fromarray(np.uint8(new_np_image))
+    transformed_image_frame.update(image)
+
+
+Button(original_image_frame, text="Load image...", command=load_image).pack(anchor=NW, side=LEFT)
+Button(original_image_frame, text="Save image", command=save_image).pack(anchor=NW, side=LEFT)
 
 bar = TabBar(tab_frame, "Kontrast")
-
-
-def update_image(fun, x):
-    global X
-    global original_image
-    global image
-    global photo
-    im = fun(x, X)
-    image = PIL.Image.fromarray(np.uint8(im))
-    photo = PIL.ImageTk.PhotoImage(image)
-    original_image.config(image=photo)
-    original_image.image = photo
-
 
 tab1 = HistTab(tab_frame, "Kontrast", update_image)
 

@@ -19,24 +19,23 @@ class MorphTab(Tab):
         w1 = Scale(master=group_dil, orient=HORIZONTAL, from_=1, to=20)
         w2 = Scale(master=group_er, orient=HORIZONTAL, from_=1, to=20)
 
-        def dil(x, img):
+        def dil(np_image):
             size = int(w1.get())
-            if size == 0: return img
-            new_img = tuple([dilation(img[:, :, i], selem=disk(size)) for i in range(0, 3)])
-            x = np.stack(new_img, axis=-1)
-            return x
+            if size == 0: return np_image
+            new_img = tuple([dilation(np_image[:, :, i], selem=disk(size)) for i in range(0, 3)])
+            return np.stack(new_img, axis=-1)
 
         Label(master=group_dil, text="Stosunek szerokości obrazka do bloku:").pack()
         w1.pack()
-        Button(master=group_dil, text="Dylatacja", command=lambda: fun(dil, 0)).pack()
+        Button(master=group_dil, text="Dylatacja", command=lambda: fun(dil)).pack()
 
-        def er(x, img):
+        def er(np_image):
             size = int(w2.get())
-            if size == 0: return img
-            new_img = tuple([erosion(img[:, :, i], selem=disk(size)) for i in range(0, 3)])
+            if size == 0: return np_image
+            new_img = tuple([erosion(np_image[:, :, i], selem=disk(size)) for i in range(0, 3)])
             x = np.stack(new_img, axis=-1)
             return x
 
         Label(master=group_er, text="Stosunek szerokości obrazka do bloku:").pack()
         w2.pack()
-        Button(master=group_er, text="Erozja", command=lambda: fun(er, 0)).pack()
+        Button(master=group_er, text="Erozja", command=lambda: fun(er)).pack()
