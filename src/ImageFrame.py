@@ -36,7 +36,8 @@ class ImageFrame(Frame):
         self._frame = LabelFrame(self, text=name, padx=5, pady=5)
         self._frame.pack()
         self._image = image
-        pil_image = PIL.ImageTk.PhotoImage(image)
+        w, h = self._get_w_h(image)
+        pil_image = PIL.ImageTk.PhotoImage(image.resize((w, h)))
 
         self._image_widget = Label(self._frame, image=pil_image)
         self._image_widget.image = pil_image
@@ -58,8 +59,23 @@ class ImageFrame(Frame):
 
     def update(self, image):
         self._image = image
-        pil_image = PIL.ImageTk.PhotoImage(image)
+        w, h = self._get_w_h(image)
+        pil_image = PIL.ImageTk.PhotoImage(image.resize((w, h)))
         self._image_widget.config(image=pil_image)
         self._image_widget.image = pil_image
         for tab in self._tabs:
             tab.update(image)
+
+    def _get_w_h(self, image):
+        w, h = image.size
+        if w > h:
+            if w > 512:
+                scale = 512/w
+                w = 512
+                h *= scale
+        else:
+            if h > 512:
+                scale = 512/h
+                h = 512
+                w *= scale
+        return int(w), int(h)

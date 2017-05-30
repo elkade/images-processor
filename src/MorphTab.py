@@ -25,7 +25,7 @@ class MorphTab(Tab):
             new_img = tuple([dilation(np_image[:, :, i], selem=disk(size)) for i in range(0, 3)])
             return np.stack(new_img, axis=-1)
 
-        Label(master=group_dil, text="Stosunek szerokości obrazka do bloku:").pack()
+        Label(master=group_dil, text="Wielkość bloku:").pack()
         w1.pack()
         Button(master=group_dil, text="Dylatacja", command=lambda: fun(dil)).pack()
 
@@ -36,6 +36,6 @@ class MorphTab(Tab):
             x = np.stack(new_img, axis=-1)
             return x
 
-        Label(master=group_er, text="Stosunek szerokości obrazka do bloku:").pack()
+        Label(master=group_er, text="Wielkość bloku:").pack()
         w2.pack()
         Button(master=group_er, text="Erozja", command=lambda: fun(er)).pack()

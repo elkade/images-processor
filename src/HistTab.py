@@ -46,7 +46,7 @@ class HistTab(Tab):
         w.pack()
         # Button(master=self, text="Wyrównaj globalnie", command=lambda: fun(global_eq, 0)).pack()
         Button(master=group_wyr, text="Wyrównaj", command=lambda: fun(local_eq)).pack()
-        Label(master=group_wyr, text="Percentyle:").pack()
+        Label(master=group_roz, text="Percentyle:").pack()
         s1.pack()
         s2.pack()
 
